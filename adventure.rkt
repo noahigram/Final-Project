@@ -300,10 +300,33 @@
                      "Add heavy seasoning and put the turkey in the oven."
                      "The pie requires eggs, flour, sugar, and fruit. Use the oven.")
                    location))
-                     
 
+;Food type
+(define-struct (food prop)
+  (
+   noun-to-print
+   examine-text
+;  ;Shows how many calories the food contains 
+   calories
+   )
+  #:methods
+  (define (noun food)
+    (food-noun-to-print food))
 
+  (define (examine food)
+    (display-line (food-examine-text food)))
+;nutritional value prints the calories
+  (define (nutritional-value?)
+    (print (calories))))
 
+;new-food creates a new food prop
+(define (new-food description examine-text location)
+  (local [(define words (string->words description))
+          (define noun (last words))
+          (define adjectives (drop-right words 1))
+          (define food (make-food adjectives '() location noun examine-text))]
+    (begin (initialize-thing! food)
+           food)))
 
 ;;;
 ;;; USER COMMANDS
