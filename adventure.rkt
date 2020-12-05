@@ -271,11 +271,10 @@
   #:methods
   ;; change noun to just return "book"; we put the recipe
   ;; part in the adjectives
-  (define (noun book) "recipe")
-  ;; shake: magic-8-ball -> void
-  ;; Randomly print a saying.
+  (define (noun book) "book")
+
   (define (read book)
-    (print recipes))
+    (print (recipe-book-recipes book))))
 
 ;; Tell the help system that read is a command.
 (define-user-command (read book)
@@ -291,7 +290,7 @@
                               location
                               recipes))]
     (begin (initialize-thing! book)
-           book)))
+           book))) 
   
 ;; main-recipe-book: container -> recipe-book
 ;; Makes the standard recipe book that will be in the kitchen
@@ -299,7 +298,8 @@
   (new-recipe-book '("Don't cook the banana!"
                      "Cover the skillet with oil or butter and cook the eggs with it on the stove."
                      "Add heavy seasoning and put the turkey in the oven."
-                     "The pie requires eggs, flour, sugar, and fruit. Use the oven."
+                     "The pie requires eggs, flour, sugar, and fruit. Use the oven.")
+                   location))
                      
 
 
@@ -383,12 +383,13 @@
 ;; Recreate the player object and all the rooms and things.
 (define (start-game)
   ;; Fill this in with the rooms you want
-  (local [(define starting-room (new-room ""))]
-    (begin (set! me (new-person "" starting-room))
+  (local [(define room1 (new-room "kitchen"))
+          (define room2 (new-room "pantry"))]
+    (begin (set! me (new-person "" room1))
            ;; Add join commands to connect your rooms with doors
-
+           (join! room1 "kitchen" room2 "pantry")
            ;; Add code here to add things to your rooms
-           
+           (main-recipe-book room1)
            (check-containers!)
            (void))))
 
